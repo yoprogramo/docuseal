@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on: buildjet-8vcpu-ubuntu-2204-arm
+    runs-on: ubuntu-24.04-arm
 
     steps:
     - name: Checkout code
@@ -12,25 +12,23 @@ jobs:
       with:
         submodules: recursive
 
-    -
-      name: Docker meta
+    - name: Docker meta
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: |
-          docuseal/docuseal
-        tags: |
-          1.9.2
+        images: docuseal/docuseal
+        tags: 1.9.3
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
+      with:
+        image: tonistiigi/binfmt:qemu-v8.1.5
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-      with:
-        config: .github/buildkitd.toml
 
     - name: Create .version file
-      run: echo "1.9.2" > .version
+      run: echo "1.9.3" > .version
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
